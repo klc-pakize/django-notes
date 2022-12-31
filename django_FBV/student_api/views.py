@@ -46,13 +46,13 @@ def student_detail(request, id):  # id == pk Represents the id number from the b
 @api_view(['PUT'])
 def student_update(request, pk):
     student = get_object_or_404(Student, id = pk)
-    serializer = StudentSerializer(instance = student, data = request.data)
+    serializer = StudentSerializer(instance = student, data = request.data)  # instance:get student by id number  get edited student compare and make changes
     if serializer.is_valid():
         serializer.save()
-        massage = {
+        message = {
             "message" :f"{student}  update successfuly..!"
         }
-        return Response(massage)
+        return Response(message)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
@@ -63,4 +63,67 @@ def student_delete(request, id):
     massage = {
         "message":f"{student} deleted successfuly..!"
     }
-    return Response(massage)
+    return Response(message)
+
+
+"""
+The recommended writing method of Http Methods, 
+which we have written separately above:
+Those that need id are combined under a single function, and those that do not are combined under a single function.
+"""
+
+
+@api_view(['GET','POST'])
+def studentList(request):
+    if request.method == 'GET':
+        student = Student.objects.all()
+        serializer = StudentSerializer(student,  many = True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = StudentSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            message ={
+                "message":f"{serializer.data} created successfully..!"
+            }
+            return Response(message,  status = status.HTTP_201_CREATED)
+        return response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET','DELETE','PUT','PATCH'])
+def studentDelail(request, pk):
+    student = get_object_or_404(Student, id = pk)
+    if request.method == 'GET':
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = StudentSerializer(instance = student, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            message = {
+                "message":f"{student} updated successfuly..!"
+            }
+            return Response(message)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+    
+    elif request.method == 'PATCH':
+        serializer = StudentSerializer(instance = student, data = request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            message = {
+               "message":f"{student} updated successfuly..!"
+            }
+            return Response(message)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+    
+    elif request.method == 'DELETE':
+        student.delete()
+        message = {
+            "message":f"{student} deleted successfuly..!"
+        }
+        return Response(message)
