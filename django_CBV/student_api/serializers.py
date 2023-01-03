@@ -25,6 +25,9 @@ class PathSerializer(serializers.ModelSerializer):
 
     students = StudentSerializer(many=True)
 
+    
+
     class Meta:
-        models = Path
+        model = Path
+        # fields = "__all__"
         fields = ["id", "path_name", "students"]

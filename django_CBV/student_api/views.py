@@ -15,6 +15,8 @@ from rest_framework import status
 #class
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, mixins, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
+
 
 def home(request):
     return HttpResponse("Student api")
@@ -246,3 +248,18 @@ class StudentDetailCV(RetrieveUpdateDestroyAPIView):
 
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+#? ViewSet 
+#If we use ViewSet, we have to use endpoint operations Router
+
+class StudentMVS(ModelViewSet):
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class PathMVS(ModelViewSet):
+
+    queryset = Path.objects.all()
+    serializer_class = PathSerializer
