@@ -14,6 +14,7 @@ from rest_framework import status
 
 #class
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView, mixins
 
 def home(request):
     return HttpResponse("Student api")
@@ -185,3 +186,49 @@ class StudentListDetail(APIView):
             "message":f"{student} deleted successfully..!"
         }
         return Response(message)
+
+
+#? GenericAPIView
+# APIVeiw dwn uretilmistir arka planda bazi seyleri yapar
+# One of the key benefits of class-based views is the way they allow you to compose bits of reusable behavior. REST framework takes advantage of this by providing a number of pre-built views that provide for commonly used patterns.
+
+# GenericAPIView class extends REST framework's APIView class, adding commonly required behavior for standard list and detail views.
+#? Mixins
+
+""" - ListModelMixin  #? used to call data
+    - list method
+- CreateModelMixin  #? used to generate data
+    - create method
+- RetrieveModelMixin  #? used to call a single data
+    - retrieve method
+- UpdateModelMixin  #? Used to make changes to a single data
+    - update method
+- DestroyModelMixin  #? used to delete a single data
+    - destroy method """
+
+class StudentListGAV(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    
+class StudentDelailGAV(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
+
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

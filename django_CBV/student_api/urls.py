@@ -14,6 +14,8 @@ from .views import (
     #class
     StudentListCreate,
     StudentListDetail,
+    StudentListGAV,
+    StudentDelailGAV,
 
 )
 
@@ -29,6 +31,8 @@ urlpatterns = [
     
     
     #?The difference in defining the FBV and CBV endpoints is the addition of .as_view to the end.
-    path("student/", StudentListCreate.as_view()),
-    path("studentdetail/<int:pk>", StudentListDetail.as_view()),
+    # path("student/", StudentListCreate.as_view()),
+    # path("studentdetail/<int:pk>", StudentListDetail.as_view()),
+    path("student/", StudentListGAV.as_view()),
+    path("studentdetail/<int:pk>", StudentDelailGAV.as_view()),
 ]
