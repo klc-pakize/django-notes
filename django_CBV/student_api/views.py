@@ -14,7 +14,7 @@ from rest_framework import status
 
 #class
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView, mixins
+from rest_framework.generics import GenericAPIView, mixins, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 def home(request):
     return HttpResponse("Student api")
@@ -218,7 +218,7 @@ class StudentListGAV(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIV
         return self.create(request, *args, **kwargs)
 
     
-class StudentDelailGAV(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
+class StudentDetailGAV(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
 
 
     queryset = Student.objects.all()
@@ -232,3 +232,17 @@ class StudentDelailGAV(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixin
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+
+#? Concrete Views
+
+class StudentListCV(ListCreateAPIView):
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+class StudentDetailCV(RetrieveUpdateDestroyAPIView):
+
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
