@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # third pary app
     'rest_framework',  # We installed Rest Framework to make django work like api : pip install djangorestframework
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,17 @@ REST_FRAMEWORK = {
     #* 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',  #? To use CursorPagination, we need to create the fields created in models.py.
     #* 'PAGE_SIZE': 30,   
 } 
+
+
+#! To use filters:
+# 1- pip install django-filter
+# 2- pip freeze > requirements.txt
+# 3- INSTANCE_APPS = [... , 'django_filters',
+# ]
+
+#Filter : https://www.django-rest-framework.org/api-guide/filtering/
+REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    #? To make it custom, we can call views.py and add properties
+
+}
