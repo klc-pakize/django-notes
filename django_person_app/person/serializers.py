@@ -76,6 +76,7 @@ class DepartmentDetailSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "personal_count",
             "department",
+            "personal_count",
+            
         )

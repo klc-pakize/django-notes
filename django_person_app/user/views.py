@@ -16,7 +16,6 @@ class RegisterView(CreateAPIView):
         return response
 
 
-# ----------- User Logout Function ------------------
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 

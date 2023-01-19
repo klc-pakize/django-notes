@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from .serializers import PersonSerializer, DepartmentSerializer, DepartmentDetailSerializer
 from .models import Person, Department
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import  permission_classes, api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .permissions import IsLoginOrReadOnly

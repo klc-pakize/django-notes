@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import PersonMVS, DepartmentMVS, department_detail, department_list
+from .views import  DepartmentMVS, PersonMVS, department_detail, department_list
 
 
 
