@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Department(models.Model):
@@ -26,6 +26,7 @@ class Personnel(models.Model):
     )
 
     department = models.ForeignKey(Department, on_delete = models.SET_NULL, null = True, related_name = 'personnels')
+    create_user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
     first_name = models.CharField(max_length = 50)
     last_name = models.CharField(max_length = 50)
     title = models.CharField(max_length = 9, choices = TITLE)

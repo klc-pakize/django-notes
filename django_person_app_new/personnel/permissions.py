@@ -10,3 +10,18 @@ class IsStaffOrReadOnly(permissions.IsAdminUser):
         if request.method in permissions.SAFE_METHODS:
             return True
         return bool(request.user and request.user.is_staff)
+
+
+
+#! Each registered user will be able to view the detailed information of the personnel, but only the user who created the personnel can delete and put.
+class IsOwnerAndStaffOrReadOnly(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return bool(request.user.is_staff and (obj.create_user == request.user))
