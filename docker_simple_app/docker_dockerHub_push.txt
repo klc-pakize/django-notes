@@ -1,0 +1,34 @@
+# to create repository in dockerhub (dockerhub'da repository oluşturmak için),
+https://hub.docker.com/
+Repositories --> Create Repository
+hello-world (repo name (repo ismi))
+
+# to push to image repo (image repo'ya push yapmak için);
+# if there is no previous image (önceden image yoksa); docker build -t hello-world:1 .
+
+# docker push dockerusername/repositoryname
+docker push coopersky/hello-world
+# An image does not exist locally with the tag: coopersky/hello-world , if there is an error (hatası varsa)
+
+# To change the existing image tag (var olan iamage tag değiştirmek için);
+docker tag hello-world:1 dockerusername/hello-world:v1
+REPOSITORY                    TAG       IMAGE ID       CREATED          SIZE  
+hello-world                   1         a4094132c6f1   19 minutes ago   52.4MB
+dockerusername/hello-world         v1        a4094132c6f1   19 minutes ago   52.4MB
+
+# we push again (tekrar push ediyoruz),
+docker push dockerusername/hello-world:v1
+
+# pull ;
+docker pull dockerusername/repositoryname
+
+# I'm looking for existing images, have they arrived? (var olan image'lar bakıyorum gelmiş mi?)
+docker images
+REPOSITORY                            TAG       IMAGE ID       CREATED          SIZE
+coopersky/hello-world                  v1        a4094132c6f1   25 minutes ago   52.4MB
+hello-world                   	    1         a4094132c6f1   25 minutes ago   52.4MB
+dockerusername/repositoryname          v1        405a1d8e0109   48 minutes ago   52.4MB
+
+# çalıştırmak için,
+docker run dockerusername/repositoryname
+docker run 405(first 3 digits of image ID (image ID ilk 3 rakamı))

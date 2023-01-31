@@ -1,0 +1,48 @@
+# apps.py (python file)
+print('hello world')
+
+# dockerfile (docker file)
+FROM python:alpine3.17
+WORKDIR /app
+COPY . .
+CMD python apps.py
+
+#to create an image (image oluşturmak için);
+docker build .
+
+# to see the generated images (oluşturulan image'ları görmek için)
+docker images
+docker image ls
+REPOSITORY                    TAG       IMAGE ID       CREATED         SIZE
+<none>                        <none>    6e9bf76e581e   4 minutes ago   52.4MB
+
+# to delete created (images oluşturulan image'ları silmek için)
+docker image rm xox (first 3 characters of id (id nin ilk 3 karakteri))
+
+# Creating an image by giving TAG (TAG vererek image oluşturmak)
+docker build -t hello-world:1 .
+REPOSITORY                    TAG       IMAGE ID       CREATED         SIZE
+hello-world                   1         587303952c5c   4 seconds ago   52.4MB
+
+# to build docker container from image (image'dan docker container oluşturmak için);
+docker run hello-world:1
+# output (çıktısı) --> hello world
+
+# to see running containers (çalışan containerları görmek için);
+docker ps
+
+# to see running/non-running containers (çalışan/çalışmayan containerları görmek için);
+docker ps -a
+
+# it (it worked in interactive mode, and it opened a terminal for me (interaktif modda çalıştı, ve bana terminal açtı))
+# default bash, çıkmak için exit
+docker run -it hello-world:1 sh
+
+# additional to delete images (image'ları silmek için ilave); 
+# if it is connected to a container, use -f (bir containere bağlı ise -f kullanmak gerekir.)
+docker rmi -f hello-world:1
+
+# to delete all non-running containers (çalışmayan bütün container'ları silmek için)
+docker container prune
+
+

@@ -1,0 +1,4 @@
+FROM python:alpine3.17
+WORKDIR /app
+COPY . /app
+CMD python apps.py
