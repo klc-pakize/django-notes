@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     #myApp
     'users',
+    'personnel',
     #Thirdparty App
     'rest_framework',
     'drf_yasg',
