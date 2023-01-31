@@ -28,8 +28,8 @@ class Personnel(models.Model):
     department = models.ForeignKey(Department, on_delete = models.SET_NULL, null = True, related_name = 'personnels')
     first_name = models.CharField(max_length = 50)
     last_name = models.CharField(max_length = 50)
-    title = models.CharField(max_length = 5, choices = TITLE)
-    gender = models.CharField(max_length= 1, choices = GENDER)
+    title = models.CharField(max_length = 9, choices = TITLE)
+    gender = models.CharField(max_length= 14, choices = GENDER)
     salary = models.IntegerField(default = 1250)
     start_date = models.DateTimeField(auto_now_add = True)
 
