@@ -1,0 +1,23 @@
+version: "3.9" # optional
+
+services:
+  frontend:
+    image: docker-compose-fronted
+    build: ./frontend
+    ports:
+      - 3000:3000
+    restart: on-failure
+    depends_on:
+      - backend # first run backend.
+    volumes:
+      - ./frontend:/frontend
+
+  backend:
+    image: docker-compose-backend # build, if no image
+    build: ./backend # Which folder (project folder) (must be dockerfile in the folder)
+    ports: # external:internal ports
+      - 8000:8000
+    restart: on-failure # when restart
+    volumes: # external:internal volumes
+      - ./backend/db.sqlite3:/backend/db.sqlite3
+      - ./backend:/backend
