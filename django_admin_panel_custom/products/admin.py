@@ -3,11 +3,18 @@ from django.utils import timezone
 
 from .models import Product, Review
 
-# Register your models here.
+
+#? Inline Structure: It is the structure that allows me to see the connected child structures from the parent under the parent structure.
+class ReviewInline(admin.TabularInline):
+    model = Review
+    extra = 2  # extra 2 empty review lines are given
+    classes = ('collapse',)  # Ability to open and close
 
 class ProductAdmin(admin.ModelAdmin):
 
-    list_display = ('name', 'created_date', 'update_date', 'is_in_stock', 'added_days_ago')  #I specify which field of the models I want to see, it works the same as the str method. It overrides the list_display str method.
+    inlines = [ReviewInline]
+
+    list_display = ('name', 'created_date', 'update_date', 'is_in_stock', 'added_days_ago', 'how_many_reviews')  #I specify which field of the models I want to see, it works the same as the str method. It overrides the list_display str method.
 
     list_editable = ('is_in_stock',)  # It allows us to make changes on the main page without going into the details of the object.
     #!We cannot give the field we linked to editable.
@@ -56,8 +63,18 @@ class ProductAdmin(admin.ModelAdmin):
         difference = timezone.now() - product.created_date
         return difference.days
 
+    def how_many_reviews(self, obj):
+        count = obj.reviews.count()
+        return count
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "created_date", "is_released")
+    list_per_page = 50
+    row_id_fields = ('product',)  
+
+
+
 admin.site.site_title = 'Product Title'  # Changes the tab title.
 admin.site.site_header = 'Product Admin Panel'  # Changes the main title of the admin panel.
 admin.site.index_title = 'Welcome to Product Panel'  # Changes the second main title of the admin panel.
 admin.site.register(Product, ProductAdmin)  
-admin.site.register(Review)  
+admin.site.register(Review, ReviewAdmin)  
