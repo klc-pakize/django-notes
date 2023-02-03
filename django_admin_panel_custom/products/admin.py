@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from .models import Product
+from .models import Product, Review
 
 # Register your models here.
 
@@ -60,3 +60,4 @@ admin.site.site_title = 'Product Title'  # Changes the tab title.
 admin.site.site_header = 'Product Admin Panel'  # Changes the main title of the admin panel.
 admin.site.index_title = 'Welcome to Product Panel'  # Changes the second main title of the admin panel.
 admin.site.register(Product, ProductAdmin)  
+admin.site.register(Review)  
