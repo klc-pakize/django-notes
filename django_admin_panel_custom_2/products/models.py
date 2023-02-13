@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 
+from ckeditor.fields import RichTextField
+
 # Create your models here.
 
 class Category(models.Model):
@@ -17,7 +19,8 @@ class Product(models.Model):
 
     categories = models.ManyToManyField(Category, related_name="products")
     name = models.CharField(max_length = 100)
-    description = models.TextField(blank = True, null = True)
+    # description = models.TextField(blank = True, null = True)
+    description = RichTextField()
     created_date = models.DateTimeField(auto_now_add = True)
     update_date = models.DateTimeField(auto_now = True)
     is_in_stock = models.BooleanField(default = True)

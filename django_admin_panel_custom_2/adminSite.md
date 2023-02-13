@@ -555,7 +555,7 @@ admin.py
 from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 
 class ProductAdmin(admin.ModelAdmin):
-    list_filter = ("is_in_stock", ("create_date", DateTimeRangeFilter)) # modelde datetimefield kullandığımız için
+    list_filter = ("is_in_stock", ("create_date", DateTimeRangeFilter)) # modelde datetimefield
 ```
 
 ### import - export
@@ -564,10 +564,10 @@ https://django-import-export.readthedocs.io/en/latest/
 
 - pip install django-import-export
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
 ...
 'import_export',
-)
+]
 
 create resources.py
 
@@ -600,13 +600,13 @@ https://django-grappelli.readthedocs.io/en/latest/
 - pip install django-grappelli
 
 INSTALLED_APPS = (
-'grappelli', # en üstte olacak
+'grappelli', # will be at the top (en üstte olacak)
 'django.contrib.admin',
 )
 
 from django.conf.urls import include
 urlpatterns = [
-path('grappelli/', include('grappelli.urls')), # grappelli URLS üstte olacak
+path('grappelli/', include('grappelli.urls')), # will be at the top (en üstte olacak)
 path('admin/', admin.site.urls), # admin site
 ]
 
@@ -645,6 +645,6 @@ settings.py
     }
 ```
 
-- Note: ilgili template dosyasında: {{description | safe}}
+- Note: in the relevant template file (ilgili template dosyasında): {{description | safe}}
 
 ---

@@ -2,6 +2,11 @@ from django.contrib import admin
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
+from import_export.admin import ImportExportModelAdmin
+from products.resources import ReviewResource
+
 from .models import Product, Review, Category
 
 
@@ -21,7 +26,8 @@ class ProductAdmin(admin.ModelAdmin):
     #!We cannot give the field we linked to editable.
     list_display_links = ('created_date',)  # When we press the field written here, we go to the detail of the object. By default, the first field is given.
 
-    list_filter = ('is_in_stock', 'created_date',)  # Filters by fields
+    # list_filter = ('is_in_stock', 'created_date',)  # Filters by fields
+    list_filter = ("is_in_stock", ("created_date", DateTimeRangeFilter))
 
     ordering = ('-name',)  # It operates according to the fields entered in the sorting process, it can be added to the beginning of '-' for reverse sorting.
     
@@ -87,7 +93,11 @@ class ProductAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("__str__", "created_date", "is_released")
     list_per_page = 50
-    row_id_fields = ('product',)  
+    row_id_fields = ('product',) 
+    list_filter = (
+        ('product', RelatedDropdownFilter),
+    )
+    resource_class = ReviewResource
 
 
 
