@@ -319,6 +319,7 @@ admin.site.register(Category)
 # Display Image Fields
 
 settings.py
+import os
 
 ```python
 STATIC_URL = '/static/'
@@ -351,7 +352,8 @@ models.py
 from django.utils.safestring import mark_safe
 
 # create media folder and upload defaults/clarusway.png
-product_img = models.ImageField(null=True, blank=True, default="defaults/clarusway.png", upload_to="product/")
+product_img = models.ImageField(null=True, blank=True, default="defaults/products.png", upload_to="product/")
+
 
     def bring_image(self):
         if self.product_img:
@@ -388,7 +390,7 @@ readonly_fields = ("bring_image",)
     )
 ```
 
-listede image gösterme:
+show image in list:
 
 admin.py
 

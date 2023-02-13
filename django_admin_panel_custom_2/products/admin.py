@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from .models import Product, Review, Category
 
@@ -14,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = [ReviewInline]
 
-    list_display = ('name', 'created_date', 'update_date', 'is_in_stock', 'added_days_ago', 'how_many_reviews')  #I specify which field of the models I want to see, it works the same as the str method. It overrides the list_display str method.
+    list_display = ('name', 'created_date', 'update_date', 'is_in_stock', 'added_days_ago', 'how_many_reviews', 'bring_img_to_list')  #I specify which field of the models I want to see, it works the same as the str method. It overrides the list_display str method.
 
     list_editable = ('is_in_stock',)  # It allows us to make changes on the main page without going into the details of the object.
     #!We cannot give the field we linked to editable.
@@ -44,12 +45,13 @@ class ProductAdmin(admin.ModelAdmin):
         ('Optionals Settings', {
             "classes" : ("collapse", ),
             "fields": (
-                ('description', 'categories')
+                ('description', 'categories', "product_img", "bring_image")
             ),
             'description' : "You can use this section for optionals settings"
         }),
     )
-    
+    readonly_fields = ('bring_image',)  # Read-only fields
+
     filter_horizontal = ('categories',)  # Provides a more convenient interface for selecting product categories
     #? filter_vertical = ('categories',)  # Provides a more convenient interface for selecting product categories
     actions = ('is_in_stock',)
@@ -68,6 +70,20 @@ class ProductAdmin(admin.ModelAdmin):
     def how_many_reviews(self, obj):
         count = obj.reviews.count()
         return count
+    
+    def bring_image(self, obj):
+        if obj.product_img:
+            return mark_safe(f"<img src={obj.product_img.url} width=400 height=400></img>")
+        return mark_safe(f"<h3>{obj.name} has not image </h3>")
+
+    #? show image in list:
+    def bring_img_to_list(self, obj):
+        if obj.product_img:
+            return mark_safe(f"<img src={obj.product_img.url} width=50 height=50></img>")
+        return mark_safe("******")
+
+    bring_img_to_list.short_description = "product_image"  # It is used to make it more understandable and legible so that the method name does not appear on the homepage.
+
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("__str__", "created_date", "is_released")
     list_per_page = 50
