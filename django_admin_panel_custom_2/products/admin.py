@@ -51,7 +51,7 @@ class ProductAdmin(admin.ModelAdmin):
     )
     
     filter_horizontal = ('categories',)  # Provides a more convenient interface for selecting product categories
-    filter_vertical = ('categories',)  # Provides a more convenient interface for selecting product categories
+    #? filter_vertical = ('categories',)  # Provides a more convenient interface for selecting product categories
     actions = ('is_in_stock',)
 
     def is_in_stock(self, request, queryset):  # The objects we choose from the admin panel come as a queryset.

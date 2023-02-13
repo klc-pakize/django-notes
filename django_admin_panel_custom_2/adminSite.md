@@ -243,7 +243,7 @@ Review.objects.count()
 admin.py
 
 ```Python
-class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm aynı iş
+class ReviewInline(admin.TabularInline):  # StackedInline
     '''Tabular Inline View for '''
     model = Review
     extra = 1
