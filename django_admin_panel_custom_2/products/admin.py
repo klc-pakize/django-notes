@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from .models import Product, Review
+from .models import Product, Review, Category
 
 
 #? Inline Structure: It is the structure that allows me to see the connected child structures from the parent under the parent structure.
@@ -44,12 +44,14 @@ class ProductAdmin(admin.ModelAdmin):
         ('Optionals Settings', {
             "classes" : ("collapse", ),
             "fields": (
-                ('description',)
+                ('description', 'categories')
             ),
             'description' : "You can use this section for optionals settings"
         }),
     )
     
+    filter_horizontal = ('categories',)  # Provides a more convenient interface for selecting product categories
+    filter_vertical = ('categories',)  # Provides a more convenient interface for selecting product categories
     actions = ('is_in_stock',)
 
     def is_in_stock(self, request, queryset):  # The objects we choose from the admin panel come as a queryset.
@@ -76,5 +78,6 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.site_title = 'Product Title'  # Changes the tab title.
 admin.site.site_header = 'Product Admin Panel'  # Changes the main title of the admin panel.
 admin.site.index_title = 'Welcome to Product Panel'  # Changes the second main title of the admin panel.
-admin.site.register(Product, ProductAdmin)  
 admin.site.register(Review, ReviewAdmin)  
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Category)
