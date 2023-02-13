@@ -59,7 +59,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'tamplates'],  # Here is what we have stated: first, if there is a file named templates on base direction, run the codes in it, otherwise run the codes in the templates file in env
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

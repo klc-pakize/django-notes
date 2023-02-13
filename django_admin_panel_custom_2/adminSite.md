@@ -412,14 +412,14 @@ from django.utils.safestring import mark_safe
 
 default directory : env/lib/django/contrib/admin/templates/admin
 
-Liste Sayfası -> admin/change_list.html
-Ekleme ve Güncelleme Sayfaları -> admin/change_form.html
-Silme İşlemi İçin Onay Sayfası -> admin/delete_confirmation.html
-Modelin Geçmişi -> admin/object_history.html
+List Page (Liste Sayfası) -> admin/change_list.html
+Add and Update Pages (Ekleme ve Güncelleme Sayfaları) -> admin/change_form.html
+Confirmation Page for Deletion (Silme İşlemi İçin Onay Sayfası) -> admin/delete_confirmation.html
+Model History (Modelin Geçmişi) -> admin/object_history.html
 
-admin/<extend_edilecek_sablon_adi>.html >>>>>>> admin site ana sayfa
-admin/<app_adi>/<extend_edilecek_sablon_adi>.html >>>>>>>>> applere özel
-admin/<app_adi>/<model_adi>/<extend_edilecek_sablon_adi>.html >>>>>>>>>> modellere özel
+admin/<extension_to be_stencil_name(extend_edilecek_sablon_adi)>.html >>>>>>> admin site home page (admin site ana sayfa)
+admin/<app_name(app_adi)>/<extension_to be_stencil_name(extend_edilecek_sablon_adi)>.html >>>>>>>>> app specific (applere özel)
+admin/<app_name(app_adi)>/<model_adi>/<extension_to be_stencil_name(extend_edilecek_sablon_adi)>.html >>>>>>>>>> model specific (modellere özel)
 
 settings.py:
 
@@ -427,13 +427,13 @@ settings.py:
 'DIRS': [BASE_DIR, "templates"],
 ```
 
-ilk önce buraya bakar yoksa defaulta gider,
+looks here first or it goes to default (ilk önce buraya bakar yoksa defaulta gider,)
 
 templates/admin/product/product/change_form.html
 
-\*\* içi boş olduğu için Ekleme ve Güncelleme Sayfaları boş görünecek
+\*\* Insert and Update Pages will appear blank because it is hollow (içi boş olduğu için Ekleme ve Güncelleme Sayfaları boş görünecek)
 
-\*\* default olan change_forma gidip blockları bakabiliriz istediğimizi güncelleriz extend edip
+\*\*We can go to the default change_form and look at the blocks. ( default olan change_forma gidip blockları bakabiliriz istediğimizi güncelleriz extend edip)
 
 ```html
 {% extends 'admin/change_form.html' %} {% block form_top %}
@@ -447,8 +447,8 @@ admin templates extends hierarchy:
 base.html > base_site.html > change_form.html
 
 templates/admin/base_site.html
-img directory : static/images/clarusway.png
-add clarusway.png to this directory
+img directory : static/images/products.png
+add products.png to this directory
 base_site.html
 
 ```html
@@ -459,7 +459,7 @@ base_site.html
     style="height: 50px; width: 50px;"
     alt=""
   />
-  <h1 id="head">Clarusway Admin Site</h1>
+  <h1 id="head">Products Admin Site</h1>
 </div>
 {% endblock %} {% block extrastyle %}
 <style>
