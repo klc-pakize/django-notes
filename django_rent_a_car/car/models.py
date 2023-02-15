@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -25,3 +26,22 @@ class Car(models.Model):
     def __str__(self):
         return f" {self.plate_number} {self.model} {self.brand} "
     
+
+class Reservation(models.Model):
+
+    customer = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'customers')
+    car = models.ForeignKey(Car, on_delete = models.CASCADE, related_name = 'cars')
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.customer} {self.car}"
+    
+    #! A user can only book one car on the same dates:
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields = ['customer', 'start_date', 'end_date'], name = 'user_rent_date'
+            )
+        ]
