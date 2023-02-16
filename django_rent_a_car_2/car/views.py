@@ -76,13 +76,9 @@ class ReservationDetailView(RetrieveUpdateDestroyAPIView):
         start = instance.start_date  # I was able to access the start_date field like end and car fields, but since they can use both put and patch on the front end, we accessed the object from the variable I assigned above. In Put operation we have to resend all the data, in Patch we can only send the data we want to change.
         if Reservation.objects.filter(car = car).exists():  # I check the reservation table for any information about the vehicle I want to extend the expiry date. Returns True if present, False otherwise.
             for res in Reservation.objects.filter(car = car):
-                if res.start_date < end:
+                if start < res.start_date < end:
                     return Response({'message':'Car is not available'})
         return super().update(request, *args, **kwargs)        
         
-        self.perform_update(serializer)
 
-        return Response(serializer.data)
 
-    def perform_update(self, serializer):
-        serializer.save()

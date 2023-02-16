@@ -10,5 +10,5 @@ router.register('car', CarView)
 urlpatterns = [
     path("",include(router.urls)),
     path('reservation/', ReservationView.as_view()),
-    path('reservation/<int:pk>/', ReservationDetailView.as_view()),
+    path('reservation/<int:pk>/', ReservationDetailView.as_view())
 ]
