@@ -3,6 +3,7 @@ from django.db.models import Q
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Car, Reservation
 from .serializers import CarSerializer, ReservationSerializer
@@ -45,3 +46,4 @@ class ReservationView(ListCreateAPIView):
 
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+    permission_classes = [IsAuthenticated]
