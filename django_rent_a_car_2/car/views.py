@@ -46,4 +46,11 @@ class ReservationView(ListCreateAPIView):
 
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # If the user is registered, they can only make reservations.
+
+    #! If the user is an admin, let him view every reservation, if the user is a customer, let him see only his own reservations
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return super().get_queryset()
+        return super().get_queryset().filter(customer = self.request.user)
