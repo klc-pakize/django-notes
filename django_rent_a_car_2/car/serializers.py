@@ -31,7 +31,7 @@ class CarSerializer(serializers.ModelSerializer):
 
 
 class ReservationSerializer(serializers.ModelSerializer):
-
+    total_price = serializers.SerializerMethodField()
     class Meta:
         model = Reservation
         fields = (
@@ -39,7 +39,8 @@ class ReservationSerializer(serializers.ModelSerializer):
             'customer',
             'car',
             'start_date',
-            'end_date'
+            'end_date',
+            'total_price',
         )
 
         #! I need to validate the data coming from the frontend first, because I have specified my customer, start_date and end_date fields as unique in the models section:
@@ -51,3 +52,6 @@ class ReservationSerializer(serializers.ModelSerializer):
                 message = 'You alreday have a reservation beetwen these dates.'            
             )
         ]
+
+    def get_total_price(self, obj):
+        return obj.car.rent_per_day * (obj.end_date - obj.start_date).days
