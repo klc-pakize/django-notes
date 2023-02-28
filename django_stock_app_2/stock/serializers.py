@@ -62,4 +62,4 @@ class PurchasesSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()
     class Meta:
         model = Purchases
-        fields = ['id', 'user', 'user_id', 'firm', 'firm_id', 'brand', 'brand_id', 'product', 'product_id', 'quantitiy', 'price', 'price_total', 'createds', 'updated']
+        fields = ['id', 'user', 'user_id', 'firm', 'firm_id', 'brand', 'brand_id', 'product', 'product_id', 'quantity', 'price', 'price_total', 'createds', 'updated']
