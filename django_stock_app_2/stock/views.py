@@ -78,7 +78,7 @@ class PurchasesView(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         #! #############  ADD Product Stock ############
         
-        purchase = request.data # gelen datayı değişkene atadık
+        purchase = request.data # we assign the incoming data to the variable
         product = Product.objects.get(id = purchase['product_id'])
         product.stock += purchase['quantity']
         product.save()
@@ -89,8 +89,7 @@ class PurchasesView(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(user = self.request.user)  # datayı gönderen user'a bu şekilde ulaşabiliriz
-
+        serializer.save(user = self.request.user)  # we can reach the user who sent the data like this
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -99,8 +98,8 @@ class PurchasesView(ModelViewSet):
         serializer.is_valid(raise_exception=True)        
         #! #############  UPDATE Product Stock ############
         
-        purchase = request.data # gelen datayı değişkene atadık
-        product = Product.objects.get(id = instance.product_id)  # mevcut data
+        purchase = request.data # we assign the incoming data to the variable
+        product = Product.objects.get(id = instance.product_id)  # existing data
         conclusion = purchase['quantity'] - instance.quantity
         product.stock += conclusion
         product.save()
@@ -122,7 +121,7 @@ class PurchasesView(ModelViewSet):
         instance = self.get_object()
         #! #############  DELETE Product Stock ############
         
-        product = Product.objects.get(id = instance.product_id)  # mevcut data
+        product = Product.objects.get(id = instance.product_id)  # existing data
         product.stock += instance.quantity
         product.save()
 
@@ -142,3 +141,78 @@ class SalesView(ModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['brand', 'product']
     search_fields = ['brand']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #! #############  REDUCE Product Stock ############
+        
+        sales = request.data # we assign the incoming data to the variable
+        product = Product.objects.get(id = sales['product_id'])
+        if sales['quantity'] <= product.stock:
+            product.stock -= sales['quamtity']
+            product.save()
+        else:
+            data = {
+                "message": f"Dont have enough stock, current stock is {product.stock}"
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        
+        #! #############################################
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)  # we can reach the user who sent the data like this
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)        
+        #! #############  UPDATE Product Stock ############
+        
+        sale = request.data # we assign the incoming data to the variable
+        product= Product.objects.get(id=instance.product_id) 
+        
+        if sale["quantity"] > instance.quantity:
+            
+            if sale["quantity"] <= instance.quantity + product.stock:
+                product.stock = instance.quantity + product.stock - sale["quantity"]
+                product.save()
+            else:
+                data = {
+                "message": f"Dont have enough stock, current stock is {product.stock}"
+                }
+                return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+            
+        elif instance.quantity >= sale["quantity"]:
+            product.stock += instance.quantity - sale["quantity"]
+            product.save()
+
+        #! #############################################
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        
+        #!####### DELETE Product Stock ########
+
+        product = Product.objects.get(id=instance.product_id)
+        product.stock += instance.quantity
+        product.save()
+
+        #!##################################
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
