@@ -6,7 +6,8 @@ from .models import Category, Product, Brand, Firm, Purchases, Sales
 from .serializers import CategorySerializer, CategoryProductSerializer, BrandSerializer, FirmSerializer, ProductSerializer, PurchasesSerializer
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import filters
+from rest_framework import filters, status
+from rest_framework.response import Response
 from rest_framework.permissions import DjangoModelPermissions
 # Create your views here.
 
@@ -72,3 +73,62 @@ class PurchasesView(ModelViewSet):
     filterset_fields = ['firm', 'product']
     search_fields = ['firm']
     
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #! #############  ADD Product Stock ############
+        
+        purchase = request.data # gelen datayı değişkene atadık
+        product = Product.objects.get(id = purchase['product_id'])
+        product.stock += purchase['quantity']
+        product.save()
+
+        #! #############################################
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)  # datayı gönderen user'a bu şekilde ulaşabiliriz
+
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)        
+        #! #############  UPDATE Product Stock ############
+        
+        purchase = request.data # gelen datayı değişkene atadık
+        product = Product.objects.get(id = instance.product_id)  # mevcut data
+        conclusion = purchase['quantity'] - instance.quantity
+        product.stock += conclusion
+        product.save()
+
+        #! #############################################
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        #! #############  DELETE Product Stock ############
+        
+        product = Product.objects.get(id = instance.product_id)  # mevcut data
+        product.stock += instance.quantity
+        product.save()
+        
+        #! #############################################
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        instance.delete()
