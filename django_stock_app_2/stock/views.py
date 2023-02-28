@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Category, Product, Brand, Firm, Purchases, Sales
-from .serializers import CategorySerializer, CategoryProductSerializer
+from .serializers import CategorySerializer, CategoryProductSerializer, BrandSerializer
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
@@ -38,3 +38,11 @@ class CategoryView(ModelViewSet):
             return CategoryProductSerializer
         return super().get_serializer_class()
 
+class BrandView(ModelViewSet):
+
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    permission_classes = [DjangoModelPermissions]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+    
