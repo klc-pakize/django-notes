@@ -15,9 +15,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
 
+    category = serializers.StringRelatedField()
+    category_id = serializers.IntegerField()
+    brand = serializers.StringRelatedField()
+    brand_id = serializers.IntegerField()
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ['id','name', 'category', 'category_id', 'brand', 'brand_id', 'stock', 'updated', 'createds']
+        read_only_fields = ['stock']
 
 #! We have created a new serializer to display the product details for the category when searching using the name filter in the category enpoint.
 class CategoryProductSerializer(serializers.ModelSerializer):
@@ -44,4 +49,3 @@ class FirmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firm
         fields = ['id', 'name', 'phone', 'image', 'address']
-        
