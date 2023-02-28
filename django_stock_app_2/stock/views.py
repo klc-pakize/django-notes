@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Category, Product, Brand, Firm, Purchases, Sales
-from .serializers import CategorySerializer, CategoryProductSerializer, BrandSerializer, FirmSerializer, ProductSerializer, PurchasesSerializer
+from .serializers import CategorySerializer, CategoryProductSerializer, BrandSerializer, FirmSerializer, ProductSerializer, PurchasesSerializer, SalesSerializer
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters, status
@@ -125,10 +125,20 @@ class PurchasesView(ModelViewSet):
         product = Product.objects.get(id = instance.product_id)  # mevcut data
         product.stock += instance.quantity
         product.save()
-        
+
         #! #############################################
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_destroy(self, instance):
         instance.delete()
+
+
+class SalesView(ModelViewSet):
+
+    queryset = Sales.objects.all()
+    serializer_class = SalesSerializer
+    permission_classes = [DjangoModelPermissions]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['brand', 'product']
+    search_fields = ['brand']
